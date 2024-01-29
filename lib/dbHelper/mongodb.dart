@@ -20,6 +20,17 @@ class MongoDatabase {
     return arrData;
   }
 
+  static Future<void> update(Model data) async {
+    //Mongo CRUD - https://pub.dev/packages/mongo_dart
+
+    var response = await userCollection.findOne({"_id": data.id});
+    response["mobile"] = data.mobile;
+    response["fname"] = data.fname;
+    await userCollection.replaceOne({"_id": data.id}, response);
+
+    inspect(response);
+  }
+
   static Future<String> insert(Model data) async {
     try {
       var result = await userCollection.insertOne(data.toJson());

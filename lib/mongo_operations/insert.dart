@@ -15,17 +15,27 @@ class _MongoInsertState extends State<MongoInsert> {
   var mobileController = TextEditingController();
   var fNameController = TextEditingController();
 
+  var _checkInsertUpdate = "Insert";
+
   @override
   Widget build(BuildContext context) {
+    //Getting & storing arguments from previous page(Edit button)
+    Model data = ModalRoute.of(context)!.settings.arguments as Model;
+    if (data != null) {
+      mobileController.text = data.mobile;
+      fNameController.text = data.fname;
+      _checkInsertUpdate = "Update";
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              const Text(
-                'Insert Data',
-                style: TextStyle(fontSize: 22),
+              Text(
+                _checkInsertUpdate,
+                style: const TextStyle(fontSize: 22),
               ),
               const SizedBox(height: 50),
               TextField(
@@ -45,9 +55,19 @@ class _MongoInsertState extends State<MongoInsert> {
                       onPressed: () => _fakeData(),
                       child: const Text('Generate Data')),
                   ElevatedButton(
-                      onPressed: () => _insertData(
-                          mobileController.text, fNameController.text),
-                      child: const Text('Insert Data')),
+                    onPressed: () {
+                      if (_checkInsertUpdate == "Update") {
+                        print("UPDATE CALLED");
+                        _updateData(data.id, mobileController.text,
+                            fNameController.text);
+                      } else {
+                        print("INSERT CALLED");
+                        _insertData(
+                            mobileController.text, fNameController.text);
+                      }
+                    },
+                    child: Text(_checkInsertUpdate),
+                  ),
                 ],
               )
             ],
@@ -63,6 +83,12 @@ class _MongoInsertState extends State<MongoInsert> {
       mobileController.text = '1234567890';
       fNameController.text = faker.person.firstName();
     });
+  }
+
+  Future<void> _updateData(var id, String mobileNo, String fName) async {
+    final updateData = Model(id: id, mobile: mobileNo, fname: fName);
+    await MongoDatabase.update(updateData)
+        .whenComplete(() => Navigator.pop(context));
   }
 
   Future<void> _insertData(String mobileNo, String fName) async {
