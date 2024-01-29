@@ -31,6 +31,10 @@ class MongoDatabase {
     inspect(response);
   }
 
+  static delete(Model data) async {
+    await userCollection.remove(where.id(data.id));
+  }
+
   static Future<String> insert(Model data) async {
     try {
       var result = await userCollection.insertOne(data.toJson());
