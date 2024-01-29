@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mongodb_tut/dbHelper/mongodb.dart';
 import 'package:mongodb_tut/mongo_operations/display.dart';
 import 'package:mongodb_tut/mongo_operations/insert.dart';
+import 'package:mongodb_tut/mongo_operations/query.dart';
 import 'package:mongodb_tut/mongo_operations/update.dart';
 
 void main() async {
@@ -41,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // return MongoInsert();
     // return MongoDisplay();
-    return MongoUpdate();
+    // return MongoUpdate();
+    return QueryDb();
   }
 }

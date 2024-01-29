@@ -20,6 +20,15 @@ class MongoDatabase {
     return arrData;
   }
 
+  //USE FOR QUERY
+  static Future<List<Map<String, dynamic>>> getQueryData() async {
+    // var whereCondition = "where.gt('latitude',${150}).lt('longitude',${170})";
+    final data = await userCollection
+        .find(where.gt('latitude', '100').lt('latitude', '200'))
+        .toList();
+    return data;
+  }
+
   static Future<void> update(Model data) async {
     //Mongo CRUD - https://pub.dev/packages/mongo_dart
 
